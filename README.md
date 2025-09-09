@@ -3,7 +3,55 @@ Repositório criado pelo **GitHub Classroom**
 
 ---
 
-## PARTE PRÁTICA
+## 📖 PARTE TEÓRICA
+
+### O que é Scotty?
+
+Basicamente, o Scotty é um framework web em Haskell que nos permite criar sites e APIs de forma fácil e rápida. Ele foi inspirado no Sinatra do Ruby.
+
+### Análise de código
+
+O código tem algumas semelhanças com o conteúdo que já vimos, mas também traz novidades. Peguei um trecho do código da Isadora para análise, pois as coisas novas são as mesmas vistas nos exemplos, e conta com mais algumas diferenças:
+
+```haskell
+main :: IO ()
+main = do
+  allLyrics <- (parseLyrics <$> readFile arquivoTxt)
+  allAnswers <- (parseAnswers <$> readFile arquivoTxt)
+  scotty 3000 $ do
+    middleware simpleCors
+    get "/listlyrics" $ do
+      rng <- newStdGen
+      json (shuffle' allLyrics (length allLyrics) rng)
+    get "/answer/:ans/:idL" $ do
+      answer <- T.unpack <$> captureParam "ans"
+      idL <- T.unpack <$> captureParam "idL"
+      json (checkAnswer answer (convertString idL) allAnswers)
+```
+
+## Novidades
+### 🔹Leitura e Processamento
+
+- `allLyrics <- parseLyrics <$> readFile arquivoTxt` : lê e processa o arquivo de letras.  
+- `allAnswers <- parseAnswers <$> readFile arquivoTxt` : lê e processa o arquivo de respostas.  
+
+> A notação `<$>` me causou estranhamento, não consegui compreender exatamente qual sua função geral.  
+> Baseado em leituras pela internet, entendi que permite aplicar funções dentro de contextos como `IO` sem precisar quebrar o fluxo com `do` e `let`.
+
+### 🔹Servidor
+
+- `scotty 3000 $ do` : inicia UM servidor web na porta 3000.  
+- `middleware simpleCors` : adiciona CORS para permitir requisições de outros domínios.  
+  Simplificando, serve para que o front-end consiga se comunicar com o back-end sem ser bloqueado pelo navegador.
+
+### 🔹Rotas
+
+- `get "/listlyrics"` : rota que retorna todas as letras embaralhadas formatadas em JSON.  
+- `get "/answer/:ans/:idL"` : rota que pega parâmetros da URL e verifica se a resposta tá correta, também retornando JSON.
+
+---
+
+## 🖥️ PARTE PRÁTICA
  Inicialmente tive dificuldade para acessar os programas, mas após instalar corretamente as bibliotecas, não houve problemas. A instalação é bem simples:
  
  cabal update
@@ -55,6 +103,12 @@ https://www.haskell.org/cabal
 https://hackage.haskell.org/package/scotty
 
 https://youtu.be/psTTKGj9G6Y?si=5CK4wZ3iszF9aQHc
+
+https://www.haskell.org/tutorial/io.html
+
+https://haskell.tailorfontela.com.br/introduction
+
+https://www.reddit.com/r/haskell
 
 ---
 
