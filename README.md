@@ -98,6 +98,8 @@ Também temos a opção /near/:lat/:lon, que recebe uma latitude e longitude na 
 ## FONTES:
 Material da matéria sobre a biblioteca Scotty
 
+https://github.com/elc117/perso-2024b-fennerspohr
+ 
 https://www.haskell.org/cabal
 
 https://hackage.haskell.org/package/scotty
